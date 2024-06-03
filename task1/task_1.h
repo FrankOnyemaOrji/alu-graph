@@ -8,124 +8,111 @@
 #define MAX_COUNTRIES 12
 
 /**
-* struct Country - A country.
-* @name: The name of the country.
-* @edges: The countries that this country shares a border with.
-* @edge_count: The number of countries that this country shares a border with.
-* @author: Frank Onyema Orji
-*/
+ * struct Country - Represents a country.
+ * @name: The name of the country.
+ * @borders: The indices of the neighboring countries.
+ * @border_count: The number of neighboring countries.
+ * @author: Frank Onyema Orji
+ */
 typedef struct Country
 {
-	char name[50];
-
-	int edges[MAX_COUNTRIES];
-
-	int edge_count;
-
+    char name[50];
+    int borders[MAX_COUNTRIES];
+    int border_count;
 } Country;
 
 /**
-* struct Graph - A graph.
-* @countries: The countries in the graph.
-* @country_count: The number of countries in the graph.
-*/
+ * struct Graph - Represents a graph of countries.
+ * @countries: An array of countries in the graph.
+ * @country_count: The total number of countries in the graph.
+ */
 typedef struct Graph
 {
-	Country countries[MAX_COUNTRIES];
-	int country_count;
-
+    Country countries[MAX_COUNTRIES];
+    int country_count;
 } Graph;
 
-/*
-* initializeGraph - Initializes the graph with the given country names.
-* @g: The graph to initialize.
-* @number_of_countries: The number of countries in the graph.
-* @country_names: The names of the countries.
-*/
-void initializeGraph(Graph *g, int number_of_countries, char country_names[][50])
-{
-	g->country_count = number_of_countries;
-	for (int i = 0; i < number_of_countries; i++)
-
-	{
-		strcpy(g->countries[i].name, country_names[i]);
-		g->countries[i].edge_count = 0;
-		for (int j = 0; j < MAX_COUNTRIES; j++)
-
-		{
-			g->countries[i].edges[j] = 0;
-		}
-	}
-}
-
-/*
-* addEdge - Adds an edge between two countries.
-* @g: The graph to add the edge to.
-* @start: The index of the first country.
-* @end: The index of the second country.
-*/
-void addEdge(Graph *g, int start, int end)
-{
-	g->countries[start].edges[g->countries[start].edge_count++] = end;
-	g->countries[end].edges[g->countries[end].edge_count++] = start;
-}
-
-/*
-* printAdjacencyList - Prints the adjacency list of the graph.
-* @g: The graph to print.
-*/
-void printAdjacencyList(Graph *g)
-{
-	for (int i = 0; i < g->country_count; i++)
-
-	{
-		printf("%s: ", g->countries[i].name);
-		for (int j = 0; j < g->countries[i].edge_count; ++j)
-
-		{
-			printf("%s ", g->countries[g->countries[i].edges[j]].name);
-		}
-		printf("\n");
-	}
-}
-
-/*
- * printAdjacencyMatrix - Prints the adjacency matrix of the graph.
- * @g: The graph to print.
+/**
+ * initializeGraph - Initializes the graph with given country names.
+ * @graph: Pointer to the graph to be initialized.
+ * @num_countries: The number of countries in the graph.
+ * @country_names: Array of country names.
  */
-void printAdjacencyMatrix(Graph *g)
+void initializeGraph(Graph *graph, int num_countries, char country_names[][50])
 {
-	for (int i = 0; i < g->country_count; i++)
-
-	{
-		for (int j = 0; j < g->country_count; j++)
-
-		{
-			int connected = 0;
-
-			for (int k = 0; k < g->countries[i].edge_count; k++)
-
-			{
-				if (g->countries[i].edges[k] == j)
-				{
-					connected = 1;
-					break;
-				}
-			}
-
-			printf("%d ", connected);
-		}
-		printf("\n");
-	}
+    graph->country_count = num_countries;
+    for (int i = 0; i < num_countries; i++)
+    {
+        strcpy(graph->countries[i].name, country_names[i]);
+        graph->countries[i].border_count = 0;
+        for (int j = 0; j < MAX_COUNTRIES; j++)
+        {
+            graph->countries[i].borders[j] = 0;
+        }
+    }
 }
 
-/*
-* deleteGraph - Deletes the graph.
-* @g: The graph to delete.
-*/
-void deleteGraph(Graph *g)
+/**
+ * addEdge - Creates a border (edge) between two countries.
+ * @graph: Pointer to the graph.
+ * @start: Index of the first country.
+ * @end: Index of the second country.
+ */
+void addEdge(Graph *graph, int start, int end)
 {
-	free(g);
+    graph->countries[start].borders[graph->countries[start].border_count++] = end;
+    graph->countries[end].borders[graph->countries[end].border_count++] = start;
+}
+
+/**
+ * printAdjacencyList - Prints the adjacency list representation of the graph.
+ * @graph: Pointer to the graph.
+ */
+void printAdjacencyList(Graph *graph)
+{
+    for (int i = 0; i < graph->country_count; i++)
+    {
+        printf("%s: ", graph->countries[i].name);
+        for (int j = 0; j < graph->countries[i].border_count; j++)
+        {
+            printf("%s ", graph->countries[graph->countries[i].borders[j]].name);
+        }
+        printf("\n");
+    }
+}
+
+/**
+ * printAdjacencyMatrix - Prints the adjacency matrix representation of the graph.
+ * @graph: Pointer to the graph.
+ */
+void printAdjacencyMatrix(Graph *graph)
+{
+    for (int i = 0; i < graph->country_count; i++)
+    {
+        for (int j = 0; j < graph->country_count; j++)
+        {
+            int is_connected = 0;
+            for (int k = 0; k < graph->countries[i].border_count; k++)
+            {
+                if (graph->countries[i].borders[k] == j)
+                {
+                    is_connected = 1;
+                    break;
+                }
+            }
+            printf("%d ", is_connected);
+        }
+        printf("\n");
+    }
+}
+
+/**
+ * deleteGraph - Frees the memory allocated for the graph.
+ * @graph: Pointer to the graph to be deleted.
+ */
+void deleteGraph(Graph *graph)
+{
+    free(graph);
 }
 
 #endif /* TASK1_H */

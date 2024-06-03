@@ -11,37 +11,33 @@
 #define QUEUE_SIZE 100
 
 /**
- * struct Vertex - A vertex.
- * @value: int value of the vertex.
- * @edges: Array of pointers to vertices representing edges.
- * @edgeCount: Number of edges for the vertex.
+ * struct Vertex - Represents a vertex in the graph.
+ * @value: Integer value of the vertex.
+ * @edges: Array of pointers to other vertices (edges).
+ * @edgecount: Count of edges for this vertex.
  * @author: Frank Onyema Orji
  */
 typedef struct Vertex
 {
     int value;
-
     struct Vertex **edges;
     int edgeCount;
-
 } Vertex;
 
 /**
- * struct Graph2 - A graph.
- * @vertices: The array of vertices in the graph.
- * @vertexCount: The number of vertices in the graph.
+ * struct Graph2 - Represents a graph.
+ * @vertices: Array of vertices in the graph.
+ * @vertexCount: Count of vertices in the graph.
  */
 typedef struct Graph2
 {
     Vertex vertices[MAX_VERTICES + 1];
     int vertexCount;
-
 } Graph2;
 
 /**
- * initializeGraph2 - Initializes the graph.
- *
- * @graph: Pointer to the graph to be initialized.
+ * initializeGraph2 - Initializes the graph structure.
+ * @graph: Pointer to the graph to initialize.
  */
 void initializeGraph2(Graph2 *graph)
 {
@@ -50,21 +46,19 @@ void initializeGraph2(Graph2 *graph)
 
 /**
  * addVertex - Adds a vertex to the graph.
- *
- * @graph: Pointer to the graph to which the vertex will be added.
- * @value: The value of the vertex to be added.
+ * @graph: Pointer to the graph where the vertex will be added.
+ * @value: The value of the new vertex.
  */
 void addVertex(Graph2 *graph, int value)
 {
     if (graph->vertexCount >= MAX_VERTICES)
     {
-        printf("Graph is full. Cannot add more vertices.\n");
+        printf("The graph is full, cannot add more vertices.\n");
         return;
     }
 
-    /*Check if the vertex with the given value already exists*/
+    // Check if a vertex with this value already exists
     for (int i = 0; i < graph->vertexCount; ++i)
-
     {
         if (graph->vertices[i].value == value)
         {
@@ -73,7 +67,7 @@ void addVertex(Graph2 *graph, int value)
         }
     }
 
-    /*Add the new vertex to the graph*/
+    // Add the new vertex to the graph
     graph->vertices[graph->vertexCount].value = value;
     graph->vertices[graph->vertexCount].edges = NULL;
     graph->vertices[graph->vertexCount].edgeCount = 0;
@@ -81,11 +75,10 @@ void addVertex(Graph2 *graph, int value)
 }
 
 /**
- * addEdge2 - Adds an edge between two vertices.
- *
+ * addEdge2 - Creates an edge between two vertices in the graph.
  * @graph: The graph containing the vertices.
- * @fromValue: The value of the source vertex.
- * @toValue: The value of the destination vertex.
+ * @fromValue: The value of the start vertex.
+ * @toValue: The value of the end vertex.
  */
 void addEdge2(Graph2 *graph, int fromValue, int toValue)
 {
@@ -125,11 +118,11 @@ void addEdge2(Graph2 *graph, int fromValue, int toValue)
     fromVertex->edges[fromVertex->edgeCount++] = toVertex;
 }
 
-/*
- * DFSUtil - A utility function to perform a depth-first search on the graph.
- * @graph: The graph to perform the search on.
- * @vertex: The vertex to start the search from.
- * @visited: An array of booleans to keep track of visited vertices.
+/**
+ * DFSUtil - Utility function for performing DFS.
+ * @graph: The graph on which DFS is being performed.
+ * @vertex: The current vertex in DFS traversal.
+ * @visited: Array to track visited vertices.
  */
 void DFSUtil(Graph2 *graph, Vertex *vertex, bool visited[])
 {
@@ -147,9 +140,9 @@ void DFSUtil(Graph2 *graph, Vertex *vertex, bool visited[])
     }
 }
 
-/*
- * depthFirstSearch - Performs a depth-first search on the graph.
- * @graph: The graph to perform the search on.
+/**
+ * depthFirstSearch - Performs depth-first search on the graph.
+ * @graph: The graph to perform DFS on.
  */
 void depthFirstSearch(Graph2 *graph)
 {
@@ -157,7 +150,6 @@ void depthFirstSearch(Graph2 *graph)
 
     printf("DFS traversal: ");
     for (int i = 0; i < graph->vertexCount; i++)
-
     {
         if (!visited[graph->vertices[i].value])
         {
@@ -167,9 +159,9 @@ void depthFirstSearch(Graph2 *graph)
     printf("\n");
 }
 
-/*
- * breadthFirstSearch - Performs a breadth-first search on the graph.
- * @graph: The graph to perform the search on.
+/**
+ * breadthFirstSearch - Performs breadth-first search on the graph.
+ * @graph: The graph to perform BFS on.
  */
 void breadthFirstSearch(Graph2 *graph)
 {
@@ -186,7 +178,6 @@ void breadthFirstSearch(Graph2 *graph)
             int current = i;
 
             visited[graph->vertices[current].value] = true;
-
             printf("%d ", graph->vertices[current].value);
 
             for (int j = 0; j < graph->vertices[current].edgeCount; j++)
@@ -198,7 +189,6 @@ void breadthFirstSearch(Graph2 *graph)
                 {
                     visited[neighbor] = true;
                     printf("%d ", neighbor);
-
                     queue[++rear] = neighbor;
                 }
             }
@@ -215,32 +205,28 @@ void breadthFirstSearch(Graph2 *graph)
                     {
                         visited[neighbor] = true;
                         printf("%d ", neighbor);
-
                         queue[++rear] = neighbor;
                     }
                 }
             }
         }
     }
-
     printf("\n");
 }
 
-/*
- * deleteGraph2 - Deletes the graph.
- * @graph: The graph to delete.
+/**
+ * deleteGraph2 - Frees the memory allocated for the graph.
+ * @graph: The graph to be deleted.
  */
 void deleteGraph2(Graph2 *graph)
 {
     for (int i = 0; i < graph->vertexCount; i++)
-
     {
         if (graph->vertices[i].edges != NULL)
         {
             free(graph->vertices[i].edges);
         }
     }
-
     graph->vertexCount = 0;
 }
 

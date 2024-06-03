@@ -4,13 +4,12 @@
 #include <string.h>
 
 /**
- * main - Entry point.
+ * main - Entry point of the program.
  *
  * Return: Always 0.
- *@author: Frank Onyema Orji
+ * @author: Frank Onyema Orji
  */
- * gcc -Wall -Wextra -Werror -pedantic -g3 -o task1 task1.c init.c
- */
+ 
 int main(void)
 {
     char country_names[MAX_COUNTRIES][50] = {
@@ -27,40 +26,42 @@ int main(void)
         "Mozambique",
         "Malawi"};
 
-    Graph *g = malloc(sizeof(Graph));
+    Graph *graph = malloc(sizeof(Graph));
+    if (graph == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed\n");
+        return 1;
+    }
 
-    initializeGraph(g, MAX_COUNTRIES, country_names);
+    initializeGraph(graph, MAX_COUNTRIES, country_names);
 
-    /* TODO: loop */
+    addEdge(graph, 0, 1);  /* Congo-Brazzaville - DRC */
+    addEdge(graph, 1, 3);  /* DRC - Rwanda */
+    addEdge(graph, 1, 4);  /* DRC - Burundi */
+    addEdge(graph, 1, 6);  /* DRC - Tanzania */
+    addEdge(graph, 1, 7);  /* DRC - Angola */
+    addEdge(graph, 2, 6);  /* Uganda - Tanzania */
+    addEdge(graph, 2, 5);  /* Uganda - Kenya */
+    addEdge(graph, 3, 5);  /* Rwanda - Kenya */
+    addEdge(graph, 4, 6);  /* Burundi - Tanzania */
+    addEdge(graph, 5, 6);  /* Kenya - Tanzania */
+    addEdge(graph, 6, 11); /* Tanzania - Malawi */
+    addEdge(graph, 6, 10); /* Tanzania - Mozambique */
+    addEdge(graph, 6, 8);  /* Tanzania - Zambia */
+    addEdge(graph, 7, 8);  /* Angola - Zambia */
+    addEdge(graph, 8, 11); /* Zambia - Malawi */
+    addEdge(graph, 8, 9);  /* Zambia - Zimbabwe */
+    addEdge(graph, 8, 10); /* Zambia - Mozambique */
+    addEdge(graph, 9, 10); /* Zimbabwe - Mozambique */
+    addEdge(graph, 10, 6); /* Mozambique - Tanzania */
 
-    addEdge(g, 0, 1);  /*DRC Congo-Brazzaville*/
-    addEdge(g, 1, 3);  /*DRC Rwanda*/
-    addEdge(g, 1, 4);  /*DRC Burundi*/
-    addEdge(g, 1, 6);  /*DRC Tanzania*/
-    addEdge(g, 1, 7);  /*DRC Angola*/
-    addEdge(g, 2, 6);  /*Uganda Tanzania*/
-    addEdge(g, 2, 5);  /*Uganda Kenya*/
-    addEdge(g, 3, 5);  /*Rwanda Tanzania*/
-    addEdge(g, 4, 6);  /*Burundi Tanzania*/
-    addEdge(g, 5, 6);  /*Kenya Tanzania*/
-    addEdge(g, 6, 11); /*Tanzania Malawi*/
-    addEdge(g, 6, 10); /*Tanzania Mozambique*/
-    addEdge(g, 6, 8);  /*Tanzania Zambia*/
-    addEdge(g, 7, 8);  /*Angola Zambia*/
-    addEdge(g, 8, 11); /*Zambia Malawi*/
-    addEdge(g, 8, 9);  /*Zambia Zimbabwe*/
-    addEdge(g, 8, 9);  /*Zambia Mozambique*/
-    addEdge(g, 9, 10); /*Zimbabwe Mozambique*/
-    addEdge(g, 10, 6); /*Mozambique Tanzania*/
+    printf("Adjacency List:\n");
+    printAdjacencyList(graph);
 
-    printf("Adjacency list:\n");
-    printAdjacencyList(g);
+    printf("\nAdjacency Matrix:\n");
+    printAdjacencyMatrix(graph);
 
-    printf("\nAdjacency matrix:\n");
+    deleteGraph(graph);
 
-    printAdjacencyMatrix(g);
-
-    deleteGraph(g);
-
-    return (0);
+    return 0;
 }
